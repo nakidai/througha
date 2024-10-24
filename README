@@ -1,0 +1,4 @@
+Simple script for running command under a proxy.
+
+It unsets all variables with "_proxy" in their name and then sets "all_proxy"
+variable to first argument if it's not a dash.
