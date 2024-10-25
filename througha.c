@@ -21,8 +21,12 @@ void usage(const char *name, const char *message)
 size_t get_envname(char *dest, const char *var)
 {
     size_t i = 0;
+
+    if (dest == NULL || var == NULL) return 0;
+
     while ((dest[i] = tolower(var[i])) != '=') ++i;
     dest[i] = '\0';
+
     return i;
 }
 
