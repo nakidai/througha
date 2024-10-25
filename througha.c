@@ -18,23 +18,26 @@ void usage(const char *name, const char *message)
     exit(1);
 }
 
+size_t get_envname(char *dest, const char *var)
+{
+    size_t i = 0;
+    while ((dest[i] = tolower(var[i])) != '=') ++i;
+    dest[i] = '\0';
+    return i;
+}
+
 int main(int argc, char **argv, char **env)
 {
+    char envname[128];
+
     if (argc < 2)
         usage(argv[0], "no proxy was specified");
     else if (argc < 3)
         usage(argv[0], "no command was specified");
 
-    for (char **envp = env; *envp != NULL; ++envp)
-    {
-        *strchr(*envp, '=') = '\0';
-
-        for (char *cp = *envp; *cp != '\0'; ++cp)
-            *cp = tolower(*cp);
-
-        if (strstr(*envp, "_proxy"))
-            unsetenv(*envp);
-    }
+    for (char **envp = env; *envp != NULL; ++envp, get_envname(envname, *envp))
+        if (strstr(envname, "_proxy"))
+            unsetenv(envname);
 
     if (strcmp(argv[1], "-"))
         setenv("all_proxy", argv[1], 1);
